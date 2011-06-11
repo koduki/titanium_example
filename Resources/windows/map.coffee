@@ -1,48 +1,54 @@
 currentWindow = Titanium.UI.currentWindow
-currentLatitude = -1
-currentLongitude = -1
-getCurrentLocation = (e) ->
-        currentLatitude = e.cords.latitude
-        currentLongitude = e.cords.longitude
 
+Ti.Geolocation.preferredProvider = "gps"
 locationView = Titanium.Map.createView
    mapType: Titanium.Map.STANDARD_TYPE
    region:
-           latitude:40.0
+           latitude:35
            longitude:130
-           latitudeDelta: 30
-           longitudeDelta:30
+           latitudeDelta: 0.8
+           longitudeDelta:0.8
    animate:true
    regionFit:true
+   userLocation:true
 
 currentWindow.add locationView
 
-activity = Titanium.Android.currentActivity
-b1 = Ti.UI.createButton
-   title:'Open Window'
-   height:'auto'
-   width:'auto'
+label1 = Ti.UI.createLabel
+   left:45
+   top:13
+   height:42
+   width:240
+   text:'hello'
 
-b1.addEventListener 'click', (e) ->
-   w = Ti.UI.createWindow
-         background:'blue'
-         navBarHidden:false
-         activity:
-                 onCreateOptionsMenu : (e) ->
-                         menu2 = e.menu
-                         m1 = menu.add { title:'Close Window' }
-                         m1.setIcon(Titanium.Android.R.drawble.ic_menu_close_clear_cancel)
-                         m1.addEventListener 'click', (e) -> 
-                                 Ti.UI.currentWindow.close
-   l = Ti.UI.createLabel
-         background:'white'
-         color:'black'
-         width:'auto'
-         height:'auto'
-         text:'Press the menu'
+currentWindow.add label1
 
-   w.add l
-   w.open
-      animated:true
+getCurrentLocation = (e) ->
+        locationView.setLocation
+           latitude:e.coords.latitude
+           longitude:e.coords.longitude
+           latitudeDelta: 0.04
+           longitudeDelta:0.04
 
-cureentWindow.add b1
+        label1.text = e.coords.latitude
+
+Ti.Android.currentActivity.onCreateOptionsMenu = (e) ->
+   Ti.API.debug 'onCreateOptionsMenu'
+   menu = e.menu
+
+   menu1 = menu.add
+      title:'現在位置'
+      itemId:0
+
+   menu2 = menu.add
+      title:'menu2'
+      itemId:1
+
+   menu1.addEventListener "click", (e) ->
+           label1.text = 'add event'
+           Ti.Geolocation.purpose = "GPS demo"
+           Ti.Geolocation.accuracy = Ti.Geolocation.ACCURACY_BEST
+           Ti.Geolocation.getCurrentPosition( getCurrentLocation)
+
+   menu2.addEventListener "click", (e) ->
+           Ti.Geolocation.removeEventListener("location", getCurrentLocation)

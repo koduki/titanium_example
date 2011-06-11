@@ -1,58 +1,55 @@
-var activity, b1, currentLatitude, currentLongitude, currentWindow, getCurrentLocation, locationView;
+var currentWindow, getCurrentLocation, label1, locationView;
 currentWindow = Titanium.UI.currentWindow;
-currentLatitude = -1;
-currentLongitude = -1;
-getCurrentLocation = function(e) {
-  currentLatitude = e.cords.latitude;
-  return currentLongitude = e.cords.longitude;
-};
+Ti.Geolocation.preferredProvider = "gps";
 locationView = Titanium.Map.createView({
   mapType: Titanium.Map.STANDARD_TYPE,
   region: {
-    latitude: 40.0,
+    latitude: 35,
     longitude: 130,
-    latitudeDelta: 30,
-    longitudeDelta: 30
+    latitudeDelta: 0.8,
+    longitudeDelta: 0.8
   },
   animate: true,
-  regionFit: true
+  regionFit: true,
+  userLocation: true
 });
 currentWindow.add(locationView);
-activity = Titanium.Android.currentActivity;
-b1 = Ti.UI.createButton({
-  title: 'Open Window',
-  height: 'auto',
-  width: 'auto'
+label1 = Ti.UI.createLabel({
+  left: 45,
+  top: 13,
+  height: 42,
+  width: 240,
+  text: 'hello'
 });
-b1.addEventListener('click', function(e) {
-  var l, w;
-  w = Ti.UI.createWindow({
-    background: 'blue',
-    navBarHidden: false,
-    activity: {
-      onCreateOptionsMenu: function(e) {
-        var m1, menu2;
-        menu2 = e.menu;
-        m1 = menu.add({
-          title: 'Close Window'
-        });
-        m1.setIcon(Titanium.Android.R.drawble.ic_menu_close_clear_cancel);
-        return m1.addEventListener('click', function(e) {
-          return Ti.UI.currentWindow.close;
-        });
-      }
-    }
+currentWindow.add(label1);
+getCurrentLocation = function(e) {
+  locationView.setLocation({
+    latitude: e.coords.latitude,
+    longitude: e.coords.longitude,
+    latitudeDelta: 0.04,
+    longitudeDelta: 0.04
   });
-  l = Ti.UI.createLabel({
-    background: 'white',
-    color: 'black',
-    width: 'auto',
-    height: 'auto',
-    text: 'Press the menu'
+  return label1.text = e.coords.latitude;
+};
+Ti.Android.currentActivity.onCreateOptionsMenu = function(e) {
+  var menu, menu1, menu2;
+  Ti.API.debug('onCreateOptionsMenu');
+  menu = e.menu;
+  menu1 = menu.add({
+    title: '現在位置',
+    itemId: 0
   });
-  w.add(l);
-  return w.open({
-    animated: true
+  menu2 = menu.add({
+    title: 'menu2',
+    itemId: 1
   });
-});
-cureentWindow.add(b1);
+  menu1.addEventListener("click", function(e) {
+    label1.text = 'add event';
+    Ti.Geolocation.purpose = "GPS demo";
+    Ti.Geolocation.accuracy = Ti.Geolocation.ACCURACY_BEST;
+    return Ti.Geolocation.getCurrentPosition(getCurrentLocation);
+  });
+  return menu2.addEventListener("click", function(e) {
+    return Ti.Geolocation.removeEventListener("location", getCurrentLocation);
+  });
+};

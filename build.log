@@ -5,8 +5,7 @@ Logfile initialized
 [DEBUG] Waiting for device to be ready ...
 [TRACE] adb devices returned 1 devices/emulators
 [DEBUG] Device connected... (waited 0 seconds)
-[DEBUG] waited 3.139174 seconds on emulator to get ready
-[INFO] Waiting for the Android Emulator to become available
+[DEBUG] waited 0.014350 seconds on emulator to get ready
 [DEBUG] co.co.jp installed? False
 [INFO] Copying project resources..
 [TRACE] COPYING MODIFIED FILE: /Users/pascalm3/program/js/titanium/ilise/Resources/windows/.map.coffee.swp => /Users/pascalm3/program/js/titanium/ilise/build/android/bin/assets/Resources/windows/.map.coffee.swp
@@ -99,6 +98,6 @@ Logfile initialized
 [DEBUG] Waiting for device to be ready ...
 [TRACE] adb devices returned 1 devices/emulators
 [DEBUG] Device connected... (waited 0 seconds)
-[DEBUG] waited 0.014077 seconds on emulator to get ready
+[DEBUG] waited 0.019877 seconds on emulator to get ready
 [INFO] Installing application on emulator
 [INFO] Application installed. Launch from drawer on Home Screen
